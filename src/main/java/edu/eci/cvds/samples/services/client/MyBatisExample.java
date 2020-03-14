@@ -20,13 +20,20 @@ package edu.eci.cvds.samples.services.client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ClienteMapper;
+import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemMapper;
+import edu.eci.cvds.samples.entities.Item;
+import edu.eci.cvds.samples.entities.TipoItem;
 
 /**
  *
@@ -70,14 +77,31 @@ public class MyBatisExample {
         //cm...
         
         ClienteMapper cm=sqlss.getMapper(ClienteMapper.class);
+        ItemMapper im=sqlss.getMapper(ItemMapper.class);
         System.out.println(cm.consultarClientes());
         
-        
+        TipoItem tipoIt= new TipoItem(3,"Peliculas");
+        Item it = new Item(tipoIt,9999,"SoloCisf","SanchezRodriguez",parseDate("2019-03-12"),1234, "A4","Terror");
+        System.out.println(im.consultarItem(9999));
         sqlss.commit();
         
         
         sqlss.close(); 
         
+    }
+    
+    
+    /**
+     * Parse string to date
+     * @param date
+     * @return 
+     */
+    public static java.util.Date parseDate(String date) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
 
